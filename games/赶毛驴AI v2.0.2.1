@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #include <windows.h>
 #define set_color(x) SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), x)
-#define VER "2.0.2"
+#define VER "2.0.2.1"
 using namespace std;
 struct player {string name; int score;} p[1005];
 int ptot, pos; 
@@ -793,8 +793,11 @@ int main() {
 				cout << '\n';
 				while (1) {
 					if (hs) {
-						if (!pl.size())	cout << "摸牌堆无牌，输入0则跳过\n";
-						else if (pl.size() <= 10)	cout << "摸牌堆仅剩" << pl.size() << "张牌\n";
+						cout << "摸牌堆剩余牌数：";
+						if (pl.size() > 10)	set_color(10), cout << "充足";
+						else if (!pl.size())	set_color(4), cout << "无牌";
+						else	set_color(6), cout << pl.size() << "张";
+						set_color(15), cout << '\n'; 
 					}
 					int x, y;
 					cout << "数字（1代表A，11代表J，12代表Q，13代表K，14代表小王，15代表大王，摸牌输入0）：";
