@@ -1,0 +1,261 @@
+#include <bits/stdc++.h>
+#include <windows.h>
+using namespace std;
+pair<int, int> m[4];
+void print_message() {
+	cout << " ___    ___ ________  ________  ___" << endl;
+	cout << "|\\  \\  /  /|\\   ____\\|\\   __  \\|\\  \\" << endl;
+	cout << "\\ \\  \\/  / | \\  \\___|\\ \\  \\|\\  \\ \\  \\" << endl;
+	cout << " \\ \\    / / \\ \\  \\    \\ \\  \\\\\\  \\ \\  \\" << endl;
+	cout << "  /     \\/   \\ \\  \\____\\ \\  \\\\\\  \\ \\  \\" << endl;
+	cout << " /  /\\   \\    \\ \\_______\\ \\_______\\ \\__\\" << endl;
+	cout << "/__/ /\\ __\\    \\|_______|\\|_______|\\|__|" << endl;
+	cout << "|__|/ \\|__|" << endl;
+	cout << "扫雷 1.5.7" << endl;
+	cout << "------------------------------" << endl;
+}
+char qp[50][50], a[50][50];
+int x, y, op, remain, size, num;
+int xx[8] = {0, 0, 1, 1, -1, -1, 1, -1};
+int yy[8] = {1, -1, 0, -1, 0, 1, 1, -1};
+int color[256];
+void dfs(int x, int y) {
+	if (a[x][y] == '.' || a[x][y] == '@' || a[x][y] == '?')	remain--;
+	a[x][y] = qp[x][y];
+	if (qp[x][y] != '0') {
+		return;
+	}
+	for (int i = 0; i < 8; i++) {
+		int nx = x + xx[i];
+		int ny = y + yy[i];
+		if (nx < 1 || nx > size || ny < 1 || ny > size)	continue;
+		if (a[nx][ny] != '.' && a[nx][ny] != '@')	continue;
+		dfs(nx, ny);
+	}
+}
+void setup() {
+	color['1'] = 3;
+	color['2'] = 2;
+	color['3'] = 12;
+	color['4'] = 1;
+	color['5'] = 4;
+	color['6'] = 11;
+	color['7'] = 0;
+	color['8'] = 8;
+	m[1].first = 9;
+	m[1].second = 10;
+	m[2].first = 10;
+	m[2].second = 10;
+	m[3].first = 20;
+	m[3].second = 50;
+}
+void Setup(int n) {
+	if (n == 4) {
+		cout << "边长n（n>=8 && n<=50）：";
+		cin >> size;
+		while (size < 8 || size > 50) {
+			cout << "输入错误！" << endl;
+			cout << "边长（>=8 && <=50）：";
+			cin >> size;
+		}
+		cout << "地雷数m（m>=1 && m<n）：";
+		cin >> num;
+		while (num < 1 || num >= n) {
+			cout << "输入错误！" << endl;
+			cout << "地雷数m（m>=1 && m<n）：";
+			cin >> num;
+		}
+	}
+	else {
+		size = m[n].first;
+		num = m[n].second;
+	}
+	remain = size * size;
+	for (int i = 1; i <= size; i++) {
+		for (int j = 1; j <= size; j++) {
+			qp[i][j] = '0';
+			a[i][j] = '.';
+		}
+	}
+	for (int i = 1; i <= num; i++) {
+		while(1) {
+			x = rand() % size + 1;
+			y = rand() % size + 1;
+			if (qp[x][y] != '*') {
+				qp[x][y] = '*';
+				break;
+			}
+		}
+	}
+	for (int i = 1; i <= size; i++) {
+		for (int j = 1; j <= size; j++) {
+			if (qp[i][j] == '*') {
+				for (int k = 0; k < 8; k++) {
+					x = i + xx[k];
+					y = j + yy[k];
+					if (x < 1 || x > size || y < 1 || y > size)	continue;
+					if (qp[x][y] < '0' || qp[x][y] > '9')	continue;
+					qp[x][y]++;
+				}
+			}
+		} 
+	}
+} 
+int main() {
+	srand(time(NULL));
+	setup();
+	int mode = 0;
+	while (1) {
+		if (mode == 0) {
+			system("cls");
+			print_message();
+			cout << "选择模式" << endl;
+			while (1) {
+				cout << "1.经典模式（9x9，10颗雷）" << endl;
+				cout << "2.简单模式（10x10，10颗雷）" << endl;
+				cout << "3.困难模式（20x20，50颗雷）" << endl;
+				cout << "4.自定义" << endl;
+				cout << "操作：";
+				cin >> op;
+				if (op >= 1 && op <= 4)	break;
+				cout << "输入错误，请重新输入！" << endl;
+			}
+			if (op == 4)	cout << "设置成功！" << endl;
+			mode = op;
+			Setup(op);
+		} else	Setup(mode);
+		while (1) {
+			system("cls");
+			print_message();
+			for (int i = 1; i <= size; i++) {
+				for (int j = 1; j <= size; j++) {
+					if (a[i][j] == '0') {
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15 | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
+					}
+					else if (a[i][j] >= '1' && a[i][j] <= '9') {
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color[a[i][j]] | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
+					}
+					else if (a[i][j] == '@') {
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6 | 0);
+					}
+					else if (a[i][j] == '?') {
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14 | 0);
+					}
+					else {
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15 | 0);
+					}
+					if (a[i][j] != '0')	cout << a[i][j];
+					else	cout << ' ';
+					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15 | 0);
+				}
+				cout << endl;
+			}
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15 | 0);
+			cout << "1.点击" << endl;
+			cout << "2.标记" << endl;
+			cout << "操作：";
+			cin >> op;
+			cout << "行：";
+			cin >> x;
+			cout << "列：";
+			cin >> y;
+			if (op == 2) {
+				if (a[x][y] == '@')	a[x][y] = '?';
+				else if (a[x][y] == '?')	a[x][y] = '.';
+				else if (a[x][y] == '.')	a[x][y] = '@';
+			}
+			else if (op < 1 || op > 2) {
+				continue;
+			}
+			else if (qp[x][y] == '*') {
+				for (int i = 1; i <= size; i++) {
+					for (int j = 1; j <= size; j++) {
+						if (qp[i][j] == '*') {
+							a[i][j] = '*';
+						}
+					}
+				}
+				system("cls");
+				print_message();
+				for (int i = 1; i <= size; i++) {
+					for (int j = 1; j <= size; j++) {
+						if (a[i][j] == '0') {
+							SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15 | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
+						}
+						else if (a[i][j] == '@') {
+							SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6 | 0);
+						}
+						else if (a[i][j] == '*') {
+							SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4 | 0);
+						}
+						else if (a[i][j] == '?') {
+							SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14 | 0);
+						}
+						else if (a[i][j] >= '1' && a[i][j] <= '9') {
+							SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color[a[i][j]] | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
+						}
+						else {
+							SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15 | 0);
+						}
+						if (a[i][j] != '0')	cout << a[i][j];
+						else	cout << ' ';
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15 | 0);
+					}
+					cout << endl;
+				}
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15 | 0);
+				cout << "你输了！" << endl;
+				break;
+			}
+			else if (qp[x][y] == '0') {
+				dfs(x, y);
+			}
+			else {
+				if (a[x][y] == '.' || a[x][y] == '@')	remain--;
+				a[x][y] = qp[x][y];
+			}
+			if (remain == num) {
+				system("cls");
+				print_message();
+				for (int i = 1; i <= size; i++) {
+					for (int j = 1; j <= size; j++) {
+						if (qp[i][j] == '0') {
+							SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15 | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
+						}
+						else if (qp[i][j] == '*') {
+							SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4 | 0);
+						}
+						else if (qp[i][j] >= '1' && qp[i][j] <= '9') {
+							SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color[qp[i][j]] | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
+						}
+						else {
+							SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15 | 0);
+						}
+						if (a[i][j] != '0')	cout << qp[i][j];
+						else	cout << ' ';
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15 | 0);
+					}
+					cout << endl;
+				}
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15 | 0);
+				cout << "你赢了！" << endl;
+				break;
+			}
+		}
+		cout << "0.退出游戏" << endl;
+		cout << "1.继续游戏" << endl;
+		cout << "2.切换模式" << endl;
+		cout << "操作：";
+		cin >> op;
+		while (op < 0 || op > 2) {
+			cout << "错误！" << endl;
+			cout << "操作：";
+			cin >> op;
+		}
+		if (op == 0)	break;
+		else if (op == 1)	mode = mode;
+		else if (op == 2)	mode = 0;
+	}
+	cout << "您已退出扫雷游戏" << endl;
+	return 0;
+}
