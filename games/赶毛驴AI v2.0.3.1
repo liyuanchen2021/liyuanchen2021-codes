@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #include <windows.h>
 #define set_color(x) SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), x)
-#define VER "2.0.3-pre1"
+#define VER "2.0.3.1"
 using namespace std;
 struct player {string name; int score;} p[1005];
 int ptot, pos; 
@@ -464,10 +464,17 @@ int main() {
 						}
 					}
 				}
-				xs = 2; name1(pc1); cout << "剩余";
-				if (rp1 == 1)	set_color(4);
-				cout << rp1; set_color(15); cout << "张牌" << endl;
-				if (rp1 == 0)	final = 1;
+				xs = 2; name1(pc1);
+				if (!rp1) {
+					set_color(4);
+					cout << "已出完\n";
+					set_color(15);
+					final = 1;
+				} else {
+					cout << "剩余牌数：";
+					if (rp1 == 1)	set_color(4);
+					cout << rp1; set_color(15); cout << "张" << endl;
+				}
 			} else if (xs == 2) {
 				Sleep(1000);
 				w2 = hand[2][0][1] + hand[2][0][2];
@@ -752,10 +759,17 @@ int main() {
 						}
 					}
 				}
-				xs = 0; name2(pc2); cout << "剩余";
-				if (rp2 == 1)	set_color(4);
-				cout << rp2; set_color(15); cout << "张牌" << endl;
-				if (rp2 == 0)	final = 2;
+				xs = 0; name2(pc2);
+				if (!rp2) {
+					set_color(4);
+					cout << "已出完\n";
+					set_color(15);
+					final = 2;
+				} else {
+					cout << "剩余牌数：";
+					if (rp2 == 1)	set_color(4);
+					cout << rp2; set_color(15); cout << "张" << endl;
+				}
 			} else {
 				name(s);
 				cout << "的手牌" << endl;
@@ -794,7 +808,7 @@ int main() {
 				while (1) {
 					if (hs) {
 						cout << "摸牌堆剩余牌数：";
-						if (pl.size() > 10)	set_color(10), cout << pl.size() << "张";
+						if (pl.size() > 10)	cout << pl.size() << "张";
 						else if (!pl.size())	set_color(4), cout << "无牌";
 						else	set_color(6), cout << pl.size() << "张";
 						set_color(15), cout << '\n'; 
@@ -890,14 +904,17 @@ int main() {
 						break;
 					}
 				}
-				xs = 1;
-				name(s);
-				cout << "剩余";
-				if (rp0 == 1)	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
-				cout << rp0;
-				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
-				cout << "张牌" << endl;
-				if (rp0 == 0)	final = 0;
+				xs = 1, name(s);
+				if (!rp0) {
+					set_color(4);
+					cout << "已出完\n";
+					set_color(15);
+					final = 0;
+				} else {
+					cout << "剩余牌数：";
+					if (rp0 == 1)	set_color(4);
+					cout << rp0; set_color(15); cout << "张" << endl;
+				}
 			}
 			if ((rp0 == 0 || rp1 == 0 || rp2 == 0) && !Flag) {
 				Flag = true;
