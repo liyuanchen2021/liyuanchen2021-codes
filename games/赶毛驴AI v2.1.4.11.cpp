@@ -907,7 +907,6 @@ int main() {
 					cout << rp0; cout << "张" << endl; set_color(15);
 				}
 			}
-			cout << p0c << ' ' << p1c << ' ' << p2c << ' ' << (int)jokerf << ' ' << hs << '\n';
 			if ((rp0 == 0 || rp1 == 0 || rp2 == 0) && !Flag) {
 				Flag = true;
 				if (rp0 == 0) {
