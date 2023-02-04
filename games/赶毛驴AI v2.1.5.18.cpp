@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #include <windows.h>
 #define set_color(x) SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), x)
-#define VER "2.1.5.17"
+#define VER "2.1.5.18"
 using namespace std;
 struct player {string name; int score;} p[1005];
 int ptot, pos; 
@@ -928,7 +928,7 @@ int main() {
 					if (x > 11)	x = 11;
 					y = rand() % 9 + 1;
 					add = fe0 = x * y * 2;
-					s = p[pos].name + "[Lv." + num_to_str(get_level(p[pos].score + add)) + ']' + '(' + num_to_str(p[pos].score) + ')';
+					s = p[pos].name + "[Lv." + num_to_str(get_level(p[pos].score + add)) + ']' + '(' + num_to_str(p[pos].score + add) + ')';
 					name(s);
 					cout << "获得" << fe0 << "分" << endl;
 					Add(fe0);
@@ -964,7 +964,7 @@ int main() {
 		}
 		if (final == 0) {
 			fe0 = add / 2;
-			s = p[pos].name + "[Lv." + num_to_str(get_level(p[pos].score + fe0)) + ']' + '(' + num_to_str(p[pos].score) + ')';
+			s = p[pos].name + "[Lv." + num_to_str(get_level(p[pos].score + fe0)) + ']' + '(' + num_to_str(p[pos].score + fe0) + ')';
 			name(s);
 			cout << "获得" << fe0 << "分" << endl;
 			Add(fe0);
